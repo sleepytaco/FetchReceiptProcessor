@@ -24,4 +24,45 @@ docker run --rm -p 8888:8888 receipt-api
 
 The Flask API should now be served on host `0.0.0.0` and port `8888`. You can quickly confirm this by visiting `0.0.0.0:8888` to receive a JSON response with a welcome message.
 
-You can now POST a receipt payload to `0.0.0.0:8888/receipts/process` which will process the receipt, compute the points, and return a response with the receipt ID. You can then send a GET request to `0.0.0.0:8888/receipts/<id>/points` with the received receipt ID to find out the points given to that receipt.
+## Example Run
+
+I used curl to test the API functionality.
+
+First, I send a POST receipt payload to `0.0.0.0:8888/receipts/process`. The `/receipts/process` will process the receipt, compute the points, and return a response with the receipt ID.
+
+```shell
+> curl -X POST http://0.0.0.0:8888/receipts/process -H "Content-Type: application/json" -d '{
+    "retailer": "M&M Corner Market",
+    "purchaseDate": "2022-03-20",
+    "purchaseTime": "14:33",
+    "items": [
+      {
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      }
+    ],
+    "total": "9.00"
+  }'
+
+
+{"id":"0d3335a2-7fce-4497-8b53-f0974815d0f7"}
+```
+
+The curl command returns a response of the form `{"id": "<hash>"}`. I then send a GET request to `0.0.0.0:8888/receipts/0d3335a2-7fce-4497-8b53-f0974815d0f7/points` with the received receipt ID `0d3335a2-7fce-4497-8b53-f0974815d0f7` to find out the points given to that receipt.
+
+```shell
+> curl -X GET http://0.0.0.0:8888/receipts/0d3335a2-7fce-4497-8b53-f0974815d0f7/points
+
+
+{"points":109}
+```
+
