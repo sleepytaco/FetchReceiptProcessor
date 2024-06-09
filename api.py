@@ -3,7 +3,15 @@ from receipt import Receipt, calculate_points
 import uuid
 
 app = Flask(__name__)
-receipt_points_db = {}
+receipt_points_db = {}  # This acts as the in-memory db
+
+
+@app.route('/', methods=['POST', 'GET'])
+def home():
+    return jsonify({"message": "Welcome to the Receipt Processor API! You can POST your receipt data to the "
+                               "/receipts/process endpoint which will compute and store the points for that receipt. "
+                               "You can use the receipt ID returned by the process endpoint in a GET request to the "
+                               "/receipts/<id>/points endpoint to view the points given to the receipt."})
 
 
 # Endpoint to process receipt
@@ -41,4 +49,4 @@ def get_points(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8888, debug=False)
