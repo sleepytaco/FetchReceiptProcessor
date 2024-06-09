@@ -28,7 +28,7 @@ The Flask API should now be served on host `0.0.0.0` and port `8888`. You can qu
 
 I used curl to test the API functionality.
 
-First, I send a POST receipt payload to `0.0.0.0:8888/receipts/process`. The `/receipts/process` will process the receipt, compute the points, and return a response with the receipt ID.
+First, I send a POST request with a receipt JSON payload to `0.0.0.0:8888/receipts/process`. The `/receipts/process` endpoint will process the receipt, compute the receipt ID and points, store the points in memory, and return a response with the receipt ID.
 
 ```shell
 > curl -X POST http://0.0.0.0:8888/receipts/process -H "Content-Type: application/json" -d '{
@@ -57,7 +57,7 @@ First, I send a POST receipt payload to `0.0.0.0:8888/receipts/process`. The `/r
 {"id":"0d3335a2-7fce-4497-8b53-f0974815d0f7"}
 ```
 
-The curl command returns a response of the form `{"id": "<hash>"}`. I then send a GET request to `0.0.0.0:8888/receipts/0d3335a2-7fce-4497-8b53-f0974815d0f7/points` with the received receipt ID `0d3335a2-7fce-4497-8b53-f0974815d0f7` to find out the points given to that receipt.
+The curl command returns a response of the form `{"id": "<hash>"}`. Then, I send a GET request with the received receipt ID `0d3335a2-7fce-4497-8b53-f0974815d0f7` to `0.0.0.0:8888/receipts/0d3335a2-7fce-4497-8b53-f0974815d0f7/points`. The `/receipts/<id>/points` endpoint returns a response containing the points given to the receipt with id `<id>`.
 
 ```shell
 > curl -X GET http://0.0.0.0:8888/receipts/0d3335a2-7fce-4497-8b53-f0974815d0f7/points
